@@ -15,7 +15,7 @@ Server Initialization
 
 .. code-block:: bash
 
-    $ import pg_python
+    $ from pg_python.pg_python import *
     $ pgs = pg_server(db_name, username, password, host_address)
 
 Schema Definition (Optional)(Not available)
