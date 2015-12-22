@@ -6,14 +6,15 @@ class Db(object):
     logger = None
 
     def __init__(self, params):
-        self._make_connection()
         self.params = params
+        self._make_connection()
 
     def _make_connection(self):
+        print self.params
         try:
             self.connection = psycopg2.connect(**self.params)
-        except Exception as err:
-            self.logger.error(err)
+        except Exception as e:
+            print ("Error %s" % e)
 
     def get_connection(self):
         return self.connection

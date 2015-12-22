@@ -34,7 +34,7 @@ def write(table, kv_map):
         cursor.execute(command, values)
         connection.commit()
     except Exception as e:
-        print("Db Cursor Write Error: %s", e)
+        print("Db Cursor Write Error: %s" % e)
         return False
     return True
 
