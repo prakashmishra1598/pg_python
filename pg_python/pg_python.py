@@ -1,8 +1,8 @@
-from db._db_object import Db
-from db._write import make_postgres_write_statement
-from db._read import make_postgres_read_statement, prepare_values
-from db._update import make_postgres_update_statement
-from db._delete import make_postgres_delete_statement
+from _db_object import Db
+from _write import make_postgres_write_statement
+from _read import make_postgres_read_statement, prepare_values
+from _update import make_postgres_update_statement
+from _delete import make_postgres_delete_statement
 
 
 db = None
