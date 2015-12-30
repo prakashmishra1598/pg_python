@@ -56,8 +56,8 @@ def read(table, keys_to_get, kv_map, limit=None, order_by=None, order_type=None)
         all_values = cursor.fetchall()
         return prepare_values(all_values, keys_to_get)
     except Exception as e:
-        print("Db Cursor Write Error: %s" % e)
-        return False
+        print("Db Cursor Read Error: %s" % e)
+        return []
 
 def update(table, update_kv_map, where_kv_map):
     """
