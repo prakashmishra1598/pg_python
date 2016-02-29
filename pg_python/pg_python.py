@@ -11,7 +11,9 @@ def _get_db():
     global db
     return db
 
-def pg_server(db_name, username, password, host_address):
+print_debug_log = True
+
+def pg_server(db_name, username, password, host_address, debug=True):
   global db
   params_map = {
     'dbname': db_name,
@@ -20,6 +22,7 @@ def pg_server(db_name, username, password, host_address):
     'host': host_address,
     }
   db = Db(params_map)
+  print_debug_log = debug
 
 def write(table, kv_map):
     """
@@ -29,7 +32,7 @@ def write(table, kv_map):
     """
     connection = db.get_connection()
     cursor = db.get_cursor()
-    command, values = make_postgres_write_statement(table, kv_map)
+    command, values = make_postgres_write_statement(table, kv_map, print_debug_log)
     try:
         cursor.execute(command, values)
         connection.commit()
@@ -50,7 +53,7 @@ def read(table, keys_to_get, kv_map, limit=None, order_by=None, order_type=None)
     """
     error_return = None
     cursor = db.get_cursor()
-    command, values = make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by, order_type)
+    command, values = make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by, order_type, print_debug_log)
     try:
         cursor.execute(command, values)
         all_values = cursor.fetchall()
@@ -68,7 +71,7 @@ def update(table, update_kv_map, where_kv_map):
     """
     connection = db.get_connection()
     cursor = db.get_cursor()
-    command, values = make_postgres_update_statement(table, update_kv_map, where_kv_map)
+    command, values = make_postgres_update_statement(table, update_kv_map, where_kv_map, print_debug_log)
     try:
         cursor.execute(command, values)
         connection.commit()
@@ -87,7 +90,7 @@ def delete(table, where_kv_map):
     """
     connection = db.get_connection()
     cursor = db.get_cursor()
-    command, values = make_postgres_delete_statement(table, where_kv_map)
+    command, values = make_postgres_delete_statement(table, where_kv_map, print_debug_log)
     try:
         cursor.execute(command, values)
         connection.commit()
