@@ -14,7 +14,7 @@ def _get_db():
 print_debug_log = True
 
 def pg_server(db_name, username, password, host_address, debug=True):
-  global db
+  global db, print_debug_log
   params_map = {
     'dbname': db_name,
     'user': username,
