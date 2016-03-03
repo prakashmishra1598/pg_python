@@ -23,6 +23,7 @@ def pg_server(db_name, username, password, host_address, debug=True):
     }
   db = Db(params_map)
   print_debug_log = debug
+  return db
 
 def write(table, kv_map):
     """

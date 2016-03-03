@@ -12,9 +12,9 @@ def _get_db():
     return db
 
 print_debug_log = True
-
+params_map = {}
 def pg_server(db_name, username, password, host_address, debug=True):
-  global db, print_debug_log
+  global db, print_debug_log, params_map
   params_map = {
     'dbname': db_name,
     'user': username,
@@ -23,6 +23,7 @@ def pg_server(db_name, username, password, host_address, debug=True):
     }
   db = Db(params_map)
   print_debug_log = debug
+  return db
 
 def write(table, kv_map):
     """
@@ -30,6 +31,7 @@ def write(table, kv_map):
     :param kv_map: Key values.
     :return success_bool:
     """
+    global db, print_debug_log, params_map
     connection = db.get_connection()
     cursor = db.get_cursor()
     command, values = make_postgres_write_statement(table, kv_map, print_debug_log)
@@ -38,6 +40,7 @@ def write(table, kv_map):
         connection.commit()
     except Exception as e:
         print("Db Cursor Write Error: %s" % e)
+        db = Db(params_map)
         return False
     return True
 
@@ -69,6 +72,7 @@ def update(table, update_kv_map, where_kv_map):
     :param where_kv_map: the kv map to search for values, all values ARE ANDed.
     :return: Success or Failure.
     """
+    global db, print_debug_log, params_map
     connection = db.get_connection()
     cursor = db.get_cursor()
     command, values = make_postgres_update_statement(table, update_kv_map, where_kv_map, print_debug_log)
@@ -77,6 +81,7 @@ def update(table, update_kv_map, where_kv_map):
         connection.commit()
     except Exception as e:
         print("Db Cursor Update Error: %s" % e)
+        db = Db(params_map)
         return False
     return True
 
@@ -88,6 +93,7 @@ def delete(table, where_kv_map):
     :param where_kv_map: the kv map to search for values, all values ARE ANDed.
     :return: True or False
     """
+    global db, print_debug_log, params_map
     connection = db.get_connection()
     cursor = db.get_cursor()
     command, values = make_postgres_delete_statement(table, where_kv_map, print_debug_log)
@@ -96,5 +102,6 @@ def delete(table, where_kv_map):
         connection.commit()
     except Exception as e:
         print("Db Cursor Delete Error: %s" % e)
+        db = Db(params_map)
         return False
     return True
