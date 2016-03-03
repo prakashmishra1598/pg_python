@@ -1,4 +1,4 @@
-def make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by, order_type):
+def make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by, order_type, debug=True):
     _prefix = "SELECT"
     _table_string = " ".join(["FROM", table])
     _key_string = " AND ".join([ k + "= %s" for k in kv_map.keys()])
@@ -9,7 +9,8 @@ def make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by, or
         statement += " ORDER BY " + order_by + " " + order_type
     if limit is not None:
         statement += " LIMIT " + str(limit)
-    print("Reading From Db: %s, %s" %(statement, kv_map.values()))
+    if debug:
+      print("Reading From Db: %s, %s" %(statement, kv_map.values()))
     return statement, kv_map.values()
 
 def prepare_values(all_values, keys_to_get):
