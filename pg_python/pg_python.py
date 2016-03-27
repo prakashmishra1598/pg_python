@@ -44,7 +44,7 @@ def write(table, kv_map):
         return False
     return True
 
-def read(table, keys_to_get, kv_map, limit=None, order_by=None, order_type=None):
+def read(table, keys_to_get, kv_map, limit=None, order_by=None, order_type=None, clause = "="):
     """
     :param table: String
     :param keys_to_get: list of strings
@@ -56,7 +56,7 @@ def read(table, keys_to_get, kv_map, limit=None, order_by=None, order_type=None)
     """
     error_return = None
     cursor = db.get_cursor()
-    command, values = make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by, order_type, print_debug_log)
+    command, values = make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by, order_type, print_debug_log, clause)
     try:
         cursor.execute(command, values)
         all_values = cursor.fetchall()
