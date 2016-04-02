@@ -1,10 +1,12 @@
-def make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by, order_type, debug, clause):
+def make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by, order_type, debug, clause, group_by):
     _prefix = "SELECT"
     _table_string = " ".join(["FROM", table])
     _key_string = " AND ".join([ k + clause + "%s" for k in kv_map.keys()])
     statement = " ".join([_prefix, ", ".join(sorted(keys_to_get)), _table_string])
     if len(kv_map.keys()) > 0:
       statement = " ".join([_prefix, ", ".join(sorted(keys_to_get)), _table_string, "WHERE", _key_string])
+    if group_by is not None:
+        statement += " GROUP BY " + group_by
     if order_by is not None:
         statement += " ORDER BY " + order_by + " " + order_type
     if limit is not None:
