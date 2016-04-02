@@ -87,6 +87,24 @@ def update(table, update_kv_map, where_kv_map):
         return False
     return True
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def print_ok(s):
+    print bcolors.OKGREEN + s + bcolors.ENDC
+
+def print_warn(s):
+    print bcolors.WARNING + s + bcolors.ENDC
+
+def print_fail(s):
+    print bcolors.FAIL + s + bcolors.ENDC
 
 def delete(table, where_kv_map):
     """
