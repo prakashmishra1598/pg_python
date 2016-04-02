@@ -34,7 +34,7 @@ Each dictionary's key is the same as the column name fetched.
 
 .. code-block:: bash
 
-    $ value_list = read(table_name, keys_to_get_dict, where_kv_dict, limit, order_by, order_type):
+    $ value_list = read(table_name, keys_to_get_dict, where_kv_dict, limit, order_by, order_type, operator_string):
 
 Write operation
 ---------------
