@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: pg-python
-Version: 1.12
+Version: 1.15
 Summary: A Library to communicate with postgres from python
 Home-page: http://github.com/ingloriousb/pg_python
 Author: Gaurav Bhati
@@ -42,7 +42,7 @@ Description: Postgres python
         
         .. code-block:: bash
         
-            $ value_list = read(table_name, keys_to_get_dict, where_kv_dict, limit, order_by, order_type):
+            $ value_list = read(table_name, keys_to_get_dict, where_kv_dict, limit, order_by, order_type, operator_string)
         
         Write operation
         ---------------
