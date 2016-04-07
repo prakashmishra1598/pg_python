@@ -106,6 +106,13 @@ def print_warn(s):
 def print_fail(s):
     print bcolors.FAIL + s + bcolors.ENDC
 
+
+def close():
+    global db, print_debug_log, params_map
+    connection = db.get_connection()
+    cursor = db.get_cursor()
+    db.close_cursor(cursor)
+
 def delete(table, where_kv_map):
     """
     Delete the rows resulting from the mentined kv map. No limit.
