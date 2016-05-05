@@ -87,6 +87,25 @@ def update(table, update_kv_map, where_kv_map):
         return False
     return True
 
+def read_raw(command, values):
+    """
+    :param table: String
+    :param keys_to_get: list of strings
+    :param kv_map: key value map, if this is None, then limit is maxed at 1000
+    :param limit: None or integer
+    :param order_by: None or must be of a type String
+    :param order_type: String None, "ASC" or "DESC" only
+    :return: values in an array of key value maps
+    """
+    cursor = db.get_cursor()
+    try:
+        cursor.execute(command, values)
+        all_values = cursor.fetchall()
+        return all_values
+    except Exception as e:
+        print("Db Cursor Read Error: %s" % e)
+        return []
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -105,6 +124,13 @@ def print_warn(s):
 
 def print_fail(s):
     print bcolors.FAIL + s + bcolors.ENDC
+
+
+def close():
+    global db, print_debug_log, params_map
+    connection = db.get_connection()
+    cursor = db.get_cursor()
+    db.close_cursor(cursor)
 
 def delete(table, where_kv_map):
     """
