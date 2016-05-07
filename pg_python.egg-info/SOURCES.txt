@@ -11,6 +11,7 @@ pg_python/_write.py
 pg_python/pg_chunks.py
 pg_python/pg_python.py
 pg_python/pg_table.py
+pg_python/pg_time.py
 pg_python.egg-info/PKG-INFO
 pg_python.egg-info/SOURCES.txt
 pg_python.egg-info/dependency_links.txt
