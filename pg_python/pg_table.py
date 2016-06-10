@@ -3,7 +3,7 @@ Program's aim is to get tables from a given html
 Pure functional.
 """
 from BeautifulSoup import BeautifulSoup
-
+import urlparse
 
 def _get_soup(html, elem):
     """
@@ -78,7 +78,7 @@ def get_table(html):
     return count, all_tables
 
 
-def get_table_with_links(html):
+def get_table_with_links(html, base_url):
     """
     Fetch all tables in the html that contain links,
     returns a list of dictionaries with {header : [], data : [[]], num_links : 4}
@@ -95,7 +95,7 @@ def get_table_with_links(html):
         for s in soup:
             rows = [[cell.text for cell in row("td")]
                     for row in s("tr")]
-            links = [[cell.findAll('a') for cell in row("td")]
+            links = [[_fix_url(cell, base_url) for cell in row("td")]
                     for row in s("tr")]
             count = count + 1
             first_row = _get_header_cells(s)
@@ -113,10 +113,24 @@ def get_table_with_links(html):
         all_tables.append({'header': first_row, 'data': rows, 'title': caption, 'links' : links})
     return count, all_tables
 
+
+def _fix_url(soup, base_url):
+    # extract url from url_raw
+    aa = soup.findAll("a")
+    a_href = None
+    for a in aa:
+        try:
+            a_href_rel = a['href']
+            a_href = urlparse.urljoin(base_url, a_href_rel)
+        except Exception as e:
+            continue
+    return a_href
+
 if __name__ == "__main__":
     import requests
-    r = requests.get("http://moud.gov.in/tenders")
-    num, tables = get_table_with_links(r.content)
+    base_url = "http://www.jreda.com/tenders/tenders.htm"
+    r = requests.get(base_url)
+    num, tables = get_table_with_links(r.content, base_url)
     print num
     for table in tables:
         for link in table["links"]:
