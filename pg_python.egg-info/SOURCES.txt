@@ -9,6 +9,7 @@ pg_python/_read.py
 pg_python/_update.py
 pg_python/_write.py
 pg_python/pg_chunks.py
+pg_python/pg_net.py
 pg_python/pg_python.py
 pg_python/pg_table.py
 pg_python/pg_time.py
