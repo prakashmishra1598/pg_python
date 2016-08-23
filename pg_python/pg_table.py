@@ -131,7 +131,7 @@ if __name__ == "__main__":
     base_url = "http://www.jreda.com/tenders/tenders.htm"
     r = requests.get(base_url)
     num, tables = get_table_with_links(r.content, base_url)
-    print num
+    print(num)
     for table in tables:
         for link in table["links"]:
             print(link)
