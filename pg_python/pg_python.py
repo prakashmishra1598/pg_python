@@ -131,6 +131,7 @@ def close():
     connection = db.get_connection()
     cursor = db.get_cursor()
     db.close_cursor(cursor)
+    db.close_connection()
 
 def delete(table, where_kv_map):
     """
