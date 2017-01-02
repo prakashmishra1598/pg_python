@@ -1,6 +1,7 @@
 import xlrd
 import logging
 import sys
+import json
 
 def read_excel_workbook(file_path):
     book = xlrd.open_workbook(file_path)
@@ -40,7 +41,7 @@ def read_excel_workbook(file_path):
                     row_values.append(data.value)
             sheet_matrix.append(row_values)
         workbook_values.append(sheet_matrix)
-    return workbook_values
+    return json.dumps(workbook_values)
 
 
 def log_helper():
