@@ -18,7 +18,6 @@ def read_excel_workbook(file_path):
         max_col_id = 0
 
         sh = book.sheet_by_index(sheet_idx)
-        logging.debug("{0} {1} {2}".format(sh.name, sh.nrows, sh.ncols))
         for row_id in xrange(0, sh.nrows):
             for col_id in xrange(0, sh.ncols):
                 if sh.cell_value(row_id, col_id) != xlrd.empty_cell.value:
@@ -30,8 +29,6 @@ def read_excel_workbook(file_path):
                         max_row_id = row_id
                     if min_row_id > row_id:
                         min_row_id = row_id
-
-        logging.debug("Its a matrix from %s,%s TO %s,%s" %(min_row_id, min_col_id, max_row_id, max_col_id))
         sheet_matrix = []
         for row_id in xrange(min_row_id, max_row_id + 1):
             row_data = sh.row_slice(row_id, min_col_id, max_col_id + 1)
@@ -44,10 +41,6 @@ def read_excel_workbook(file_path):
             sheet_matrix.append(row_values)
         workbook_values.append(sheet_matrix)
     return workbook_values
-
-
-
-
 
 
 def log_helper():
