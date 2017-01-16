@@ -106,6 +106,23 @@ def read_raw(command, values):
         print("Db Cursor Read Error: %s" % e)
         return []
 
+def write_raw(command, values):
+    """
+    :params command, values. Execution commands dirctly for postgres
+    """
+    global db, print_debug_log, params_map
+    connection = db.get_connection()
+    cursor = db.get_cursor()
+    try:
+        cursor.execute(command, values)
+        connection.commit()
+    except Exception as e:
+        print("Db Cursor Write Error: %s" % e)
+        db = Db(params_map)
+        return False
+    return True
+
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
