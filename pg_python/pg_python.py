@@ -99,7 +99,10 @@ def read_raw(command, values):
     """
     cursor = db.get_cursor()
     try:
-        cursor.execute(command, values)
+        if values is not None:
+          cursor.execute(command, values)
+        else:
+          cursor.execute(command)
         all_values = cursor.fetchall()
         return all_values
     except Exception as e:
