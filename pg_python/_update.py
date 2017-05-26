@@ -8,3 +8,8 @@ def make_postgres_update_statement(table, kv_map, where_kv_map, debug = True):
     if debug:
       print("Updating into Db: %s, %s" %(statement, kv_map.values() + where_kv_map.values()))
     return statement, kv_map.values() + where_kv_map.values()
+
+def make_postgres_update_multiple_statement(table,column_to_update,
+                                            columns_to_query_lst,
+                                            query_values_dict_lst,
+                                            print_debug_log):

@@ -172,3 +172,31 @@ def delete(table, where_kv_map):
         db = Db(params_map)
         return False
     return True
+
+def update_multiple(table, column_to_update, columns_to_query_lst,
+                    query_values_dict_lst):
+    """
+    Multiple update support in pg_python
+    :param table: table to update into
+    :param column_to_update: Single column for set clause
+    :param columns_to_query_lst: column names for where clause
+    :param query_values_dict_lst: values for where and Set.
+    :return:
+    """
+    global db, print_debug_log, params_map
+    connection = db.get_connection()
+    cursor = db.get_cursor()
+    command, values = make_postgres_update_multiple_statement(table,
+                                                              column_to_update,
+                                                              columns_to_query_lst,
+                                                              query_values_dict_lst,
+                                                              print_debug_log)
+    try:
+        cursor.execute(command, values)
+        connection.commit()
+    except Exception as e:
+        print("Db Cursor Delete Error: %s" % e)
+        db = Db(params_map)
+        return False
+    return True
+
