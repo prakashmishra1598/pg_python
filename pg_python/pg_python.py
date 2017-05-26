@@ -2,8 +2,9 @@ from _db_object import Db
 from _write import make_postgres_write_statement
 from _read import make_postgres_read_statement, prepare_values
 from _update import make_postgres_update_statement
+from _update import make_postgres_update_multiple_statement
 from _delete import make_postgres_delete_statement
-
+from db_config import postgres
 
 db = None
 
@@ -186,17 +187,16 @@ def update_multiple(table, column_to_update, columns_to_query_lst,
     global db, print_debug_log, params_map
     connection = db.get_connection()
     cursor = db.get_cursor()
-    command, values = make_postgres_update_multiple_statement(table,
+    command= make_postgres_update_multiple_statement(table,
                                                               column_to_update,
                                                               columns_to_query_lst,
                                                               query_values_dict_lst,
-                                                              print_debug_log)
+                                                              print_debug_log=True)
     try:
-        cursor.execute(command, values)
+        cursor.execute(command)
         connection.commit()
     except Exception as e:
-        print("Db Cursor Delete Error: %s" % e)
+        print("Db Cursor update_multiple Error: %s" % e)
         db = Db(params_map)
         return False
     return True
-
