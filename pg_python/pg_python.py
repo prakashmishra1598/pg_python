@@ -191,7 +191,7 @@ def update_multiple(table, column_to_update, columns_to_query_lst,
                                                               column_to_update,
                                                               columns_to_query_lst,
                                                               query_values_dict_lst,
-                                                              print_debug_log=True)
+                                                              print_debug_log)
     try:
         cursor.execute(command)
         connection.commit()

@@ -7,7 +7,6 @@ def make_postgres_update_statement(table, kv_map, where_kv_map, debug = True):
     statement = " ".join([_prefix, table, "SET", keys, "WHERE", where_keys])
     if debug:
       print("Updating into Db: %s, %s" %(statement, kv_map.values() + where_kv_map.values()))
-    print statement
     return statement, kv_map.values() + where_kv_map.values()
 
 
@@ -16,11 +15,10 @@ def make_postgres_update_statement(table, kv_map, where_kv_map, debug = True):
 def get_from_clause(query_values_dict_lst,columns_to_query_lst):
     """
     get_from_clause will return the from clause that contains all tuples.
-    :param query_values_dict_lst:
-    :param columns_to_query_lst:
+    :param query_values_dict_lst: list of dictionary for values to set.
+    :param columns_to_query_lst: columns for where clause
     :return:
     """
-
     from_str = ""
     for row in query_values_dict_lst:
         temp_str = "("
@@ -41,11 +39,10 @@ def get_from_clause(query_values_dict_lst,columns_to_query_lst):
     from_clause = "from (values " + from_str + ")"
     return from_clause
 
-
 def get_as_clause(columns_to_query_lst):
     """
     get_as_clause will return all column names tuples.
-    :param columns_to_query_lst:
+    :param columns_to_query_lst: columns for where clause
     :return:
     """
     column_str = ""
@@ -58,7 +55,7 @@ def get_as_clause(columns_to_query_lst):
 def get_where_clause(columns_to_query_lst):
     """
     get_where_clause returns the where clause from the given query list.
-    :param columns_to_query_lst:
+    :param columns_to_query_lst: columns for where clause.
     :return:
     """
     where_str = "where "
@@ -68,11 +65,19 @@ def get_where_clause(columns_to_query_lst):
             where_str = where_str + " AND "
     return where_str
 
-
 def make_postgres_update_multiple_statement(table,column_to_update,
                                             columns_to_query_lst,
                                             query_values_dict_lst,
-                                            print_debug_log):
+                                            print_debug_log = True):
+    """
+    It makes query statement.
+    :param table: table to update.
+    :param column_to_update: column name that is to be updated.
+    :param columns_to_query_lst: columns name that will we used for where clause.
+    :param query_values_dict_lst: list of dictionary that contains values to update.
+    :param print_debug_log:
+    :return:
+    """
     _prefix = "UPDATE"
     table_name = table + " as t"
     keys = column_to_update + " = c.update"
@@ -81,6 +86,6 @@ def make_postgres_update_multiple_statement(table,column_to_update,
     where_clause = get_where_clause(columns_to_query_lst)
     statement = " ".join([_prefix, table_name, "SET", keys, from_clause, as_clause, where_clause])
     if print_debug_log == True:
-        print("Updating multiple rows.")
+        print("Updating multiple rows into db %s"%(statement))
     return  statement
 
