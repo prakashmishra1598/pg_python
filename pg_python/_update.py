@@ -11,7 +11,6 @@ def make_postgres_update_statement(table, kv_map, where_kv_map, debug = True):
 
 
 
-
 def get_from_clause(query_values_dict_lst,columns_to_query_lst):
     """
     get_from_clause will return the from clause that contains all tuples.
@@ -22,22 +21,25 @@ def get_from_clause(query_values_dict_lst,columns_to_query_lst):
     from_str = ""
     for row in query_values_dict_lst:
         temp_str = "("
-        for i in columns_to_query_lst:
-            if isinstance(row[i], basestring):
-                temp_str = temp_str + "'"+ row[i]+"'" + ","
+        for column_name in columns_to_query_lst:
+            col_val = row[column_name]
+            if isinstance(col_val, basestring):
+                temp_str = temp_str + "'" + col_val.replace("'","''") + "'" + ","
             else:
-                temp_str = temp_str + str(row[i]) + ","
+                temp_str = temp_str + str(col_val) + ","
 
-        if isinstance(row['update'], basestring):
-            temp_str = temp_str + "'"+ row['update'] +"'"
+        update_value = row['update']
+        if isinstance(update_value, basestring):
+            temp_str = temp_str + "'" + update_value.replace("'","''") + "'"
         else:
-            temp_str = temp_str + str(row['update'])
+            temp_str = temp_str + str(update_value)
         temp_str = temp_str + ")"
         from_str = from_str + temp_str
         if row != query_values_dict_lst[-1]:
             from_str = from_str + ","
     from_clause = "from (values " + from_str + ")"
     return from_clause
+
 
 def get_as_clause(columns_to_query_lst):
     """
@@ -86,6 +88,5 @@ def make_postgres_update_multiple_statement(table,column_to_update,
     where_clause = get_where_clause(columns_to_query_lst)
     statement = " ".join([_prefix, table_name, "SET", keys, from_clause, as_clause, where_clause])
     if print_debug_log == True:
-        print("Updating multiple rows into db %s"%(statement))
+       print("Updating multiple rows into db %s"%(statement))
     return  statement
-
