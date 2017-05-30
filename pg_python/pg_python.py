@@ -174,6 +174,32 @@ def delete(table, where_kv_map):
         return False
     return True
 
+def check_parameters(column_to_update, columns_to_query_lst, query_values_dict_lst):
+    """
+    check_prarameters checks whether the passed parameters are valid or not.
+    :param column_to_update: name of column that is to be updated.
+    :param columns_to_query_lst: list of column names that is used in where clause.
+    :param query_values_dict_lst: list of dictionaries containing values for where clause and target column.
+    :return: boolean
+    """
+    # check if dimensions are correct.
+    expected_length = 1 + len(columns_to_query_lst)
+    all_columns_name = ["update"] + columns_to_query_lst
+    flag =0
+    for dict in query_values_dict_lst:
+        # check dimensions.
+        if len(dict)!= expected_length:
+            print("%s doesn't match the dimensions"%(dict))
+            return False
+
+        # check columns present.
+        for column in all_columns_name:
+            if column not in dict:
+                print("%s column isn't present in dictionary"%(column))
+                return False
+    return True
+
+
 def update_multiple(table, column_to_update, columns_to_query_lst,
                     query_values_dict_lst):
     """
@@ -187,6 +213,11 @@ def update_multiple(table, column_to_update, columns_to_query_lst,
     global db, print_debug_log, params_map
     connection = db.get_connection()
     cursor = db.get_cursor()
+    is_pararmeters_correct = check_parameters(column_to_update, columns_to_query_lst, query_values_dict_lst)
+    if not is_pararmeters_correct:
+        print("ERROR in parameters passsed")
+        return
+
     command= make_postgres_update_multiple_statement(table,
                                                               column_to_update,
                                                               columns_to_query_lst,

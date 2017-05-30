@@ -67,6 +67,7 @@ def get_where_clause(columns_to_query_lst):
             where_str = where_str + " AND "
     return where_str
 
+
 def make_postgres_update_multiple_statement(table,column_to_update,
                                             columns_to_query_lst,
                                             query_values_dict_lst,
