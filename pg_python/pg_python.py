@@ -4,7 +4,7 @@ from _read import make_postgres_read_statement, prepare_values
 from _update import make_postgres_update_statement
 from _update import make_postgres_update_multiple_statement
 from _delete import make_postgres_delete_statement
-from db_config import postgres
+
 
 db = None
 
