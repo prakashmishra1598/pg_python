@@ -186,15 +186,15 @@ def check_parameters(column_to_update, columns_to_query_lst, query_values_dict_l
     expected_length = 1 + len(columns_to_query_lst)
     all_columns_name = ["update"] + columns_to_query_lst
     flag =0
-    for dict in query_values_dict_lst:
+    for dict_val in query_values_dict_lst:
         # check dimensions.
-        if len(dict)!= expected_length:
-            print("%s doesn't match the dimensions"%(dict))
+        if len(dict_val)!= expected_length:
+            print("%s doesn't match the dimensions"%(dict_val))
             return False
 
         # check columns present.
         for column in all_columns_name:
-            if column not in dict:
+            if column not in dict_val:
                 print("%s column isn't present in dictionary"%(column))
                 return False
     return True
