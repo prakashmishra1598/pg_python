@@ -26,6 +26,15 @@ class TestUpdateTests(unittest.TestCase):
 
         clear_table()
 
+    def test_single_update(self):
+        pg_python.pg_server("crawler", "postgres", "@hawkerIndia", "postgres-master.hawker.news", False)
+        create_rows()
+        pg_python.update(test_table,{COL_4:'updated_name1'},{COL_1:'title1%'},clause='ilike')
+        title1 = pg_python.read(test_table,[COL_4],{COL_1:'title15'})
+        self.assertEqual(title1[0][COL_4],'updated_name1')
+
+        clear_table()
+
 
 
 def create_rows():
@@ -33,7 +42,7 @@ def create_rows():
     pg_python.write(test_table, {COL_1: "title2", COL_2: "read2", COL_3: 77, COL_4: "reeer"})
     pg_python.write(test_table, {COL_1: "title3", COL_2: "read3", COL_3: 77, COL_4: "reeer"})
     pg_python.write(test_table, {COL_1: "title4", COL_2: "read4", COL_3: 77, COL_4: "reeer"})
-    pg_python.write(test_table, {COL_1: "title5", COL_2: "read5", COL_3: 77, COL_4: "reeer"})
+    pg_python.write(test_table, {COL_1: "title15", COL_2: "read5", COL_3: 77, COL_4: "reeer"})
     pg_python.write(test_table, {COL_1: "title6", COL_2: "read6", COL_3: 77, COL_4: "reeer"})
 
 def clear_table():

@@ -68,7 +68,7 @@ def read(table, keys_to_get, kv_map, limit=None, order_by=None, order_type=None,
         print("Db Cursor Read Error: %s" % e)
         return []
 
-def update(table, update_kv_map, where_kv_map):
+def update(table, update_kv_map, where_kv_map, clause = '='):
     """
     :param table: table name, type string
     :param update_kv_map: the NEW keyvalue map for values to be updated
@@ -78,7 +78,8 @@ def update(table, update_kv_map, where_kv_map):
     global db, print_debug_log, params_map
     connection = db.get_connection()
     cursor = db.get_cursor()
-    command, values = make_postgres_update_statement(table, update_kv_map, where_kv_map, print_debug_log)
+    command, values = make_postgres_update_statement(table, update_kv_map, where_kv_map,
+                                                     clause, print_debug_log)
     try:
         cursor.execute(command, values)
         connection.commit()
