@@ -22,7 +22,7 @@ def get_response(url, headers=None, cookies=None, delay=30):
                 response = requests.get(url, timeout=delay, verify=False, cookies=cookies)
             num_retries += 1
             if response.status_code >= 200:
-                ret_obj = HtmlResponse(url, status=response.status_code, body=response.text, encoding='utf-8')
+                ret_obj = HtmlResponse(url, status=response.status_code, body=response.body, encoding='utf-8')
                 return ret_obj
         except Exception as e:
             logging.debug("Exception %s" %e.message)
