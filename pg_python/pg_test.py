@@ -46,4 +46,4 @@ def create_rows():
     pg_python.write(test_table, {COL_1: "title6", COL_2: "read6", COL_3: 77, COL_4: "reeer"})
 
 def clear_table():
-    pg_python.read_raw("Delete from %s", test_table)
+    pg_python.write_raw("Delete from %s"%(test_table), "")

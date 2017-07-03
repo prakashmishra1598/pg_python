@@ -1,5 +1,5 @@
 from _db_object import Db
-from _write import make_postgres_write_statement
+from _write import make_postgres_write_statement,make_postgres_write_multiple_statement
 from _read import make_postgres_read_statement, prepare_values
 from _update import make_postgres_update_statement
 from _update import make_postgres_update_multiple_statement
@@ -232,3 +232,51 @@ def update_multiple(table, column_to_update, columns_to_query_lst,
         db = Db(params_map)
         return False
     return True
+
+
+
+def check_multiple_insert_param(columns_to_insert,insert_values_dict_lst):
+    """
+    Checks if the pararmeter passed are of correct order.
+    :param columns_to_insert:
+    :param insert_values_dict_lst:
+    :return:
+    """
+    column_len = len(columns_to_insert)
+    for row in insert_values_dict_lst:
+        if column_len!= len(row):
+            print("%s doesn't match the dimensions" % (row))
+            return False
+        for column in columns_to_insert:
+            if column not in row:
+                print("%s column isn't present in dictionary"%(column))
+                return False
+    return True
+
+
+
+def insert_multiple(table, columns_to_insert_lst, insert_values_dict_lst):
+    """
+    Multiple row insert in pg_python
+    :param table: table to insert into.
+    :param columns_to_insert_lst: columns value provided.
+    :param insert_values_dict_lst: values of corresponding columns.
+    :return:
+    """
+    global db, print_debug_log, params_map
+    connection = db.get_connection()
+    cursor = db.get_cursor()
+    is_pararmeters_correct = check_multiple_insert_param(columns_to_insert_lst, insert_values_dict_lst)
+    if not is_pararmeters_correct:
+        print("ERROR in parameters passsed")
+        return
+    command = make_postgres_write_multiple_statement(table, columns_to_insert_lst, insert_values_dict_lst, print_debug_log)
+    try:
+        cursor.execute(command)
+        connection.commit()
+    except Exception as e:
+        print("Db Cursor Write Error: %s" % e)
+        db = Db(params_map)
+        return False
+    return True
+
