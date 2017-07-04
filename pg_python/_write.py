@@ -22,21 +22,33 @@ def make_postgres_write_statement(table, kv_map, debug=True):
 
 def get_multi_insert_str(columns_to_insert,insert_values_dict_lst):
     """
-    get_multi_insert_str creates the string for multiple insertion values.
+    get_multi_insert_str creates the placeholder string for multiple insertion values.
     :param columns_to_insert:
     :param insert_values_dict_lst:
     :return:
     """
-    dict_lst = []
-    for row in insert_values_dict_lst:
-        value_lst = []
-        for col in columns_to_insert:
-            value_lst.append("'"+row[col]+"'")
-        row_col_str = "(" + ",".join(value_lst) + ")"
-        dict_lst.append(row_col_str)
-    insert_str = ",".join(dict_lst)
-    return insert_str
+    dict_lst= []
+    placeholder_str = ["%s"]*len(columns_to_insert)
+    row_str = ",".join(placeholder_str)
+    row_str = "("+row_str+")"
+    row = [row_str]
+    multi_row_str_lst = row*len(insert_values_dict_lst)
+    multi_row_str = ",".join(multi_row_str_lst)
+    return multi_row_str
 
+def get_multi_values(columns_to_insert,insert_values_dict_lst):
+    """
+    returns the values for the placeholders in query.
+    :param columns_to_insert:
+    :param insert_values_dict_lst:
+    :return:
+    """
+    values = []
+    for value_dict in insert_values_dict_lst:
+        for col in columns_to_insert:
+            value = value_dict[col]
+            values.append(value)
+    return  values
 
 
 def make_postgres_write_multiple_statement(table, columns_to_insert_lst, insert_values_dict_lst, print_debug_log=True):
@@ -52,7 +64,8 @@ def make_postgres_write_multiple_statement(table, columns_to_insert_lst, insert_
     prefix = "INSERT INTO"
     TABLE_NAME = table
     columns_str = "("+",".join(columns_to_insert_lst) + ")"
-    insert_columns = get_multi_insert_str(columns_to_insert_lst, insert_values_dict_lst)
-    statement = " ".join([prefix, TABLE_NAME, columns_str, "VALUES", insert_columns])
-    return statement
+    values_placeholder = get_multi_insert_str(columns_to_insert_lst, insert_values_dict_lst)
+    values = get_multi_values(columns_to_insert_lst,insert_values_dict_lst)
+    statement = " ".join([prefix, TABLE_NAME, columns_str, "VALUES", values_placeholder])
+    return statement,values
 

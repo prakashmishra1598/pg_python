@@ -270,9 +270,9 @@ def insert_multiple(table, columns_to_insert_lst, insert_values_dict_lst):
     if not is_pararmeters_correct:
         print("ERROR in parameters passsed")
         return
-    command = make_postgres_write_multiple_statement(table, columns_to_insert_lst, insert_values_dict_lst, print_debug_log)
+    command,values = make_postgres_write_multiple_statement(table, columns_to_insert_lst, insert_values_dict_lst, print_debug_log)
     try:
-        cursor.execute(command)
+        cursor.execute(command, values)
         connection.commit()
     except Exception as e:
         print("Db Cursor Write Error: %s" % e)
