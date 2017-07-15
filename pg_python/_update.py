@@ -11,35 +11,25 @@ def make_postgres_update_statement(table, kv_map, where_kv_map, clause, debug = 
     return statement, kv_map.values() + where_kv_map.values()
 
 
-
 def get_from_clause(query_values_dict_lst,columns_to_query_lst):
     """
-    get_from_clause will return the from clause that contains all tuples.
-    :param query_values_dict_lst: list of dictionary for values to set.
-    :param columns_to_query_lst: columns for where clause
+    returns from clause that contains tuples of placeholders
+    :param query_values_dict_lst:
+    :param columns_to_query_lst:
     :return:
     """
-    from_str = ""
-    for row in query_values_dict_lst:
-        temp_str = "("
-        for column_name in columns_to_query_lst:
-            col_val = row[column_name]
-            if isinstance(col_val, basestring):
-                temp_str = temp_str + "'" + col_val.replace("'","''") + "'" + ","
-            else:
-                temp_str = temp_str + str(col_val) + ","
+    from_str = "from (values "
+    length = len(columns_to_query_lst)+1
+    placeholder_str = ["%s"] * length
+    row_str = ",".join(placeholder_str)
+    row_str = "(" + row_str + ")"
+    num_of_dict = len(query_values_dict_lst)
+    multi_row_str = [row_str]*num_of_dict
+    multi_row_str = ",".join(multi_row_str)
+    from_str = from_str +multi_row_str +")"
+    return from_str
 
-        update_value = row['update']
-        if isinstance(update_value, basestring):
-            temp_str = temp_str + "'" + update_value.replace("'","''") + "'"
-        else:
-            temp_str = temp_str + str(update_value)
-        temp_str = temp_str + ")"
-        from_str = from_str + temp_str
-        if row != query_values_dict_lst[-1]:
-            from_str = from_str + ","
-    from_clause = "from (values " + from_str + ")"
-    return from_clause
+
 
 
 def get_as_clause(columns_to_query_lst):
@@ -62,12 +52,27 @@ def get_where_clause(columns_to_query_lst):
     :return:
     """
     where_str = "where "
+    equals_str =[]
     for row in columns_to_query_lst:
-        where_str = where_str + "c." + row + " = t." + row
-        if row != columns_to_query_lst[-1]:
-            where_str = where_str + " AND "
+        temp_str =  "c." + row + " = t." + row
+        equals_str.append(temp_str)
+    joined_str = " AND ".join(equals_str)
+    where_str= where_str +joined_str
     return where_str
 
+def get_values(column_to_query_lst, query_values_dict_lst ):
+    """
+    makes flat list for update values.
+    :param column_to_query_lst:
+    :param query_values_dict_lst:
+    :return:
+    """
+    column_to_query_lst.append("update")
+    values = []
+    for dict_row in query_values_dict_lst:
+        for col in column_to_query_lst:
+            values.append(dict_row[col])
+    return values
 
 def make_postgres_update_multiple_statement(table,column_to_update,
                                             columns_to_query_lst,
@@ -89,6 +94,8 @@ def make_postgres_update_multiple_statement(table,column_to_update,
     as_clause = get_as_clause(columns_to_query_lst)
     where_clause = get_where_clause(columns_to_query_lst)
     statement = " ".join([_prefix, table_name, "SET", keys, from_clause, as_clause, where_clause])
+    values = get_values(columns_to_query_lst, query_values_dict_lst)
     if print_debug_log == True:
        print("Updating multiple rows into db %s"%(statement))
-    return  statement
+    return  statement ,values
+

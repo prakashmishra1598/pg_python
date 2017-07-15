@@ -219,13 +219,13 @@ def update_multiple(table, column_to_update, columns_to_query_lst,
         print("ERROR in parameters passsed")
         return
 
-    command= make_postgres_update_multiple_statement(table,
+    command,values= make_postgres_update_multiple_statement(table,
                                                               column_to_update,
                                                               columns_to_query_lst,
                                                               query_values_dict_lst,
                                                               print_debug_log)
     try:
-        cursor.execute(command)
+        cursor.execute(command,values)
         connection.commit()
     except Exception as e:
         print("Db Cursor update_multiple Error: %s" % e)
