@@ -27,7 +27,7 @@ class Db(object):
             cursor = self.connection.cursor()
             return cursor
         except Exception as err:
-            self.logger.warning("Connection seems to have expired, remaking it")
+            print("Connection seems to have expired, remaking it")
             self._make_connection()
             cursor = self.connection.cursor()
             return cursor
