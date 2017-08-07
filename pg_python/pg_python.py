@@ -128,6 +128,26 @@ def write_raw(command, values):
     return True
 
 
+def update_raw(command):
+    """
+    Update statement in the raw format,
+    :param command: SQL command
+    :return: number of rows affected
+    """
+    global db, print_debug_log, params_map
+    connection = db.get_connection()
+    cursor = db.get_cursor()
+    try:
+        cursor.execute(command)
+        rowcount = cursor.rowcount
+        connection.commit()
+    except Exception as e:
+        print("Db Cursor Update Error: %s" % e)
+        db = Db(params_map)
+        return -1
+    return rowcount
+
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
