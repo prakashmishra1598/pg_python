@@ -52,6 +52,15 @@ class TestTests(unittest.TestCase):
         self.assertEqual(values,["insert1","insert2","insert3"])
         clear_table()
 
+    def test_update_raw(self):
+        pg_python.pg_server("crawler", "postgres", "@hawkerIndia", "postgres-master.hawker.news", False)
+        create_rows()
+        updates = pg_python.update_raw("update "+ test_table + " set " + COL_4 + "= 'updated_name1' where " + COL_1 + " ilike 'title1%'" )
+        title1 = pg_python.read(test_table, [COL_4], {COL_1: 'title15'})
+        self.assertEqual(title1[0][COL_4], 'updated_name1')
+        self.assertEqual(updates, 2)
+        print("UPdate raw done")
+        clear_table()
 
 
 
