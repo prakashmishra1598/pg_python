@@ -39,7 +39,6 @@ def exit_handler():
     """
     db.close_connection()
 
-
 def write(table, kv_map):
     """
     :param table: String.
