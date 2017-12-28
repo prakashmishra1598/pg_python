@@ -16,7 +16,7 @@ def make_postgres_write_statement(table, kv_map, debug=True):
     statement = " ".join([_prefix, table, "(", keys ,")", "VALUES", "(", value_proxy_string ,")"])
     if debug:
       print("Writing into Db: %s, %s" % (statement, values))
-    return statement, kv_map.values()
+    return statement, list(kv_map.values())
 
 
 
