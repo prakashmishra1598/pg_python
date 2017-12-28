@@ -3,7 +3,14 @@ def make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by,
     _prefix = "SELECT"
     _join_by = " " + join_clause + " "
     _table_string = " ".join(["FROM", table])
-    _key_string = _join_by.join([ k + clause + "%s" for k in kv_map.keys()])
+    clause = " " + clause + " "
+    _key_string = _join_by.join([k + clause + "%s" for k in kv_map.keys()])
+    values = kv_map.values()
+
+    if clause.strip().lower() == "in":
+        values = []
+        _key_string = _join_by.join([k + clause + "(" + ",".join("'" + x + "'" for x in kv_map[k]) + ")" for k in kv_map.keys()])
+
     statement = " ".join([_prefix, ", ".join(sorted(keys_to_get)), _table_string])
     if len(kv_map.keys()) > 0:
       statement = " ".join([_prefix, ", ".join(sorted(keys_to_get)), _table_string, "WHERE", _key_string])
@@ -15,7 +22,7 @@ def make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by,
         statement += " LIMIT " + str(limit)
     if debug:
       print("Reading From Db: %s, %s" %(statement, kv_map.values()))
-    return statement, kv_map.values()
+    return statement, values
 
 def prepare_values(all_values, keys_to_get):
     ret_val = []
@@ -32,3 +39,4 @@ def prepare_values(all_values, keys_to_get):
             continue
         ret_val.append(row_kv)
     return ret_val
+

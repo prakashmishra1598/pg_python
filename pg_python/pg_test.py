@@ -62,6 +62,18 @@ class TestTests(unittest.TestCase):
         print("UPdate raw done")
         clear_table()
 
+    def test_read_in(self):
+        pg_python.pg_server("crawler", "postgres", "@hawkerIndia", "postgres-master.hawker.news", False)
+        create_rows()
+        values = ['title15','title1','title2','title3']
+        rows = pg_python.read(test_table, [COL_1], {COL_1: values}, clause="in")
+        read_values = []
+        for row in rows:
+            read_values.append(row.get(COL_1))
+        self.assertEqual(sorted(read_values), sorted(values))
+        print("Read IN done")
+        clear_table()
+
 
 
 

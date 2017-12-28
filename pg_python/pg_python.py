@@ -172,13 +172,13 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 def print_ok(s):
-    print bcolors.OKGREEN + s + bcolors.ENDC
+    print(bcolors.OKGREEN + s + bcolors.ENDC)
 
 def print_warn(s):
-    print bcolors.WARNING + s + bcolors.ENDC
+    print(bcolors.WARNING + s + bcolors.ENDC)
 
 def print_fail(s):
-    print bcolors.FAIL + s + bcolors.ENDC
+    print(bcolors.FAIL + s + bcolors.ENDC)
 
 
 def close():
