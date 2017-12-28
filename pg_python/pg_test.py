@@ -74,6 +74,15 @@ class TestTests(unittest.TestCase):
         print("Read IN done")
         clear_table()
 
+    def test_read_simple(self):
+        pg_python.pg_server("crawler", "postgres", "@hawkerIndia", "postgres-master.hawker.news", False)
+        create_rows()
+        rows = pg_python.read(test_table, [COL_1], {COL_2: 'read'})
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][COL_1], 'title1')
+        print("Read simple done")
+        clear_table()
+
 
 
 
