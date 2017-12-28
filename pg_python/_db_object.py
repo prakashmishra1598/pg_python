@@ -10,7 +10,7 @@ class Db(object):
         self._make_connection()
 
     def _make_connection(self):
-        print self.params
+        print (self.params)
         try:
             self.connection = psycopg2.connect(**self.params)
         except Exception as e:
