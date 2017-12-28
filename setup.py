@@ -1,4 +1,4 @@
-from __future__ import print_function
+from __future__ import print_function, absolute_import
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import codecs
