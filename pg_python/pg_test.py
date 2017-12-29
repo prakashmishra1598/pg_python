@@ -6,6 +6,7 @@ COL_1 = "col1"
 COL_2 = "col2"
 COL_3 = "col3"
 COL_4 = "col4"
+COL_5 = "int_value"
 UPDATE = "update"
 test_table = "pg_python_test"
 
@@ -82,6 +83,15 @@ class TestTests(unittest.TestCase):
         print("Read simple done")
         clear_table()
 
+    def test_read_greater_than(self):
+        pg_python.pg_server("crawler", "postgres", "@hawkerIndia", "postgres-master.hawker.news", False)
+        create_rows()
+        rows = pg_python.read(test_table, [COL_1], {COL_5 + " >": 10})
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][COL_1], 'title6')
+        print("Read greater than done")
+        clear_table()
+
 
 def create_rows():
     pg_python.write(test_table, {COL_1: "title1", COL_2: "read", COL_3: 76, COL_4: "reeer"})
@@ -89,7 +99,7 @@ def create_rows():
     pg_python.write(test_table, {COL_1: "title3", COL_2: "read3", COL_3: 77, COL_4: "reeer"})
     pg_python.write(test_table, {COL_1: "title4", COL_2: "read4", COL_3: 77, COL_4: "reeer"})
     pg_python.write(test_table, {COL_1: "title15", COL_2: "read5", COL_3: 77, COL_4: "reeer"})
-    pg_python.write(test_table, {COL_1: "title6", COL_2: "read6", COL_3: 77, COL_4: "reeer"})
+    pg_python.write(test_table, {COL_1: "title6", COL_2: "read6", COL_3: 77, COL_4: "reeer", COL_5: 20})
 
 def clear_table():
     pg_python.write_raw("Delete from %s"%(test_table), None)
