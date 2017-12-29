@@ -8,7 +8,7 @@ def make_postgres_update_statement(table, kv_map, where_kv_map, clause, debug = 
     statement = " ".join([_prefix, table, "SET", keys, "WHERE", where_keys])
     if debug:
       print("Updating into Db: %s, %s" %(statement, kv_map.values() + where_kv_map.values()))
-    return statement, kv_map.values() + where_kv_map.values()
+    return statement, list(kv_map.values()) + list(where_kv_map.values())
 
 
 def get_from_clause(query_values_dict_lst,columns_to_query_lst):
