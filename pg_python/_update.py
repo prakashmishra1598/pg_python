@@ -7,7 +7,7 @@ def make_postgres_update_statement(table, kv_map, where_kv_map, clause, debug = 
     value_proxy_string = ", ".join(value_proxy_array)
     statement = " ".join([_prefix, table, "SET", keys, "WHERE", where_keys])
     if debug:
-      print("Updating into Db: %s, %s" %(statement, kv_map.values() + where_kv_map.values()))
+      print("Updating into Db: %s, %s" %(statement, list(kv_map.values()) + list(where_kv_map.values())))
     return statement, list(kv_map.values()) + list(where_kv_map.values())
 
 
