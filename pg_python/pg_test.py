@@ -9,6 +9,7 @@ COL_4 = "col4"
 UPDATE = "update"
 test_table = "pg_python_test"
 
+
 class TestTests(unittest.TestCase):
 
     def test_update(self):
@@ -32,9 +33,7 @@ class TestTests(unittest.TestCase):
         pg_python.update(test_table,{COL_4:'updated_name1'},{COL_1:'title1%'},clause='ilike')
         title1 = pg_python.read(test_table,[COL_4],{COL_1:'title15'})
         self.assertEqual(title1[0][COL_4],'updated_name1')
-
         clear_table()
-
 
     def test_multiple_insert(self):
         pg_python.pg_server("crawler", "postgres", "@hawkerIndia", "postgres-master.hawker.news", False)
@@ -66,7 +65,7 @@ class TestTests(unittest.TestCase):
         pg_python.pg_server("crawler", "postgres", "@hawkerIndia", "postgres-master.hawker.news", False)
         create_rows()
         values = ['title15','title1','title2','title3']
-        rows = pg_python.read(test_table, [COL_1], {COL_1: values}, clause="in")
+        rows = pg_python.read(test_table, [COL_1], {COL_1: values}, clause=" in ")
         read_values = []
         for row in rows:
             read_values.append(row.get(COL_1))
@@ -82,8 +81,6 @@ class TestTests(unittest.TestCase):
         self.assertEqual(rows[0][COL_1], 'title1')
         print("Read simple done")
         clear_table()
-
-
 
 
 def create_rows():
