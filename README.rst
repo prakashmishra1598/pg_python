@@ -30,12 +30,24 @@ Read operation
 ---------------
 Return value is a list of dictionaries.
 Every dictionary is representative of the row that is fetched.
-Each dictionary's key is the same as the column name fetched.
+Each dictionary's key is the same as the column name fetched. 
+
 
 .. code-block:: bash
 
     $ value_list = read(table_name, keys_to_get_dict, where_kv_dict, limit, order_by, order_type, operator_string)
+    
+**Parameter information :** 
 
+- keys_to_get_dict(a list of column names to fetch)
+- where_kv_dict(a dictionary to specify the 'Where' clause)
+
+**Example usage :** 
+print pg_python.read("mock_table", ['column2','column3'], {"column_1":'55'})
+  Resulting query:  SELECT column2, column3   FROM mock_table WHERE column1 = %s, ['55']
+  
+  Sample output:  [{'column2': 'column_data_A', 'column3': 'column_data_Z'}, {'column2': 'column_data_P', 'column3': 'column_data_Q'}]
+   
 Write operation
 ---------------
 
