@@ -4,7 +4,7 @@ def make_postgres_read_statement(table, kv_map, keys_to_get, limit, order_by,
     _join_by = " " + join_clause + " "
     _table_string = " ".join(["FROM", table])
     _key_string = _join_by.join([k + clause + "%s" for k in kv_map.keys()])
-    values = kv_map.values()
+    values = list(kv_map.values())
 
     if clause.strip().lower() == "in":
         values = []
